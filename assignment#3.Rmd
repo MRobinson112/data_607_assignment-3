@@ -1,0 +1,85 @@
+---
+title: "Lab-R Character Manipulation"
+author: "Michael Robinson"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+```{r cars}
+
+library(readr)
+library(dplyr)
+
+# Reading data from website.
+url <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv"
+
+# Load the dataset from the url
+college_majors <- read_csv(url)
+
+# Filter majors that contain "DATA" or "STATISTICS"
+filtered_majors <- college_majors %>%
+  filter(grepl("DATA|STATISTICS", Major, ignore.case = TRUE))
+
+# Show the majors that meet the specified criteria.
+filtered_majors
+
+```
+# 2.Write code that transforms the data below:
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+[13] "olive"        "salal berry"
+Into a format like this:
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+```{r}
+# Create a string vector 
+fruit_data <- c('[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+[13] "olive"        "salal berry"')
+
+# Eliminate line identifiers and square brackets.
+new_fruit_vector <- gsub("\\[\\d+\\] |\\n", "", fruit_data)
+
+# Segment the string using double quotes as separators.
+new_fruit_vector <- unlist(strsplit(new_fruit_vector, '\\"'))
+
+# Filtering for only letters 
+new_fruit_vector <- new_fruit_vector[grep("[a-z]", new_fruit_vector)]
+
+# Print the result
+print(new_fruit_vector)
+
+comp_data <- c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+# Print the result
+
+comp_data
+```
+# 3.  Describe, in words, what these expressions will match:
+
+
+1. `(.)\1\1`:  Matches three consecutive characters that are all the same.
+
+2. `"(.)(.)\\2\\1"`: Matches any four character string where the first and last characters are the same, and the middle two characters are also the same. 
+
+3. `(..)\1`: Matches any four character string where the first two characters are the same as the last two characters.
+
+4. `"(.).\\1.\\1"`: Matches any five character string that the first and  the third character are the same, and the third and fifth character are the same. 
+
+5. `"(.)(.)(.).*\\3\\2\\1"`: Matches a string that begins with three characters in any order, followed by any number of characters, and ends with those same three characters in reverse order.
+
+# 4. Construct regular expressions to match words that:
+
+  a.) Start and end with the same character. "^(.).*\\1$"
+  b.) Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)                    ".*(.)\\1.*\\1.*"
+  c.) Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)
+        ".*(.)\\1\\1\\1.*"
+
+
